@@ -20,7 +20,6 @@ Start the api in the terminal with docker.
 docker build -t semantic-search-api .
 
 docker run --env-file ./.env -p 8000:8000 semantic-search-api
-
 ```
 
 ## API
@@ -38,7 +37,7 @@ curl -X POST \
 }'
 ```
 
-#### GET /documents/retrieve
+#### POST /documents/retrieve
 
 This endpoint query the database for relevant documents that matches the query.
 
