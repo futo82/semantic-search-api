@@ -2,11 +2,25 @@
 
 This repository is based off of the book "Quick Start Guide to Large Language Models" by Sinan Ozdemir and contains a simple example of semantic search using OpenAI and Pinecone. There are two (2) RESTful endpoints, one to add document into a vector database and the other to query documents from the database.
 
-## Start API
+## Start API Locally
+
+Create a .env file that contains the OPENAI_API_KEY and PINECONE_API_KEY environment variables.
+
+Start the api in the terminal with python.
 
 ```
 pip install -r requirements.txt
+
 python api.py
+```
+
+
+Start the api in the terminal with docker.
+```
+docker build -t semantic-search-api .
+
+docker run --env-file ./.env -p 8000:8000 semantic-search-api
+
 ```
 
 ## API
@@ -39,4 +53,4 @@ curl -X POST \
 
 ## Dataset
 
-The [BoolQ dataset](https://github.com/google-research-datasets/boolean-questions) was used to build out the the semantic search.
+The [BoolQ dataset](https://github.com/google-research-datasets/boolean-questions) was used to build out the semantic search.

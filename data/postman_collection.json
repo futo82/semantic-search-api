@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "9116677c-bd87-4682-bb77-5461137682bd",
+		"name": "Semantic Search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6488363"
+	},
+	"item": [
+		{
+			"name": "Documents Retrieve",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": \"is all of thailand in the same time zone\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/documents/retrieve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"documents",
+						"retrieve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Document Add",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"Thailand follows UTC+7, which is seven hours ahead of UTC. The local mean time in Bangkok was originally GMT+06:42:04. Thailand used this local mean time until 1920, when it changed to Indochina Time, GMT+07:00, ICT is used all year round as Thailand does not observe daylight saving time.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/document/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"document",
+						"add"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
