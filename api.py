@@ -5,7 +5,7 @@ import uvicorn
 
 from datetime import datetime
 from dotenv import load_dotenv
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, HTTPException, Response, status
 from openai import OpenAI
 from pydantic import BaseModel
 
@@ -56,6 +56,7 @@ class InsertRequest(BaseModel):
 
 class SearchRequest(BaseModel):
     query: str
+    re_ranking_strategy: str = "none"
     num_results: int = 3
 
 class DocumentResponse(BaseModel):
@@ -70,8 +71,7 @@ class SearchResponse(BaseModel):
 @app.post("/document/add", status_code=status.HTTP_201_CREATED)
 async def add_document(request: InsertRequest, response: Response):
     if not pinecone_key:
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-        return
+            raise HTTPException(status_code=500, detail="Failed to initiate database client.")
     
     embedding = get_embedding(request.text)
     pinecone_request = [
@@ -86,7 +86,7 @@ async def add_document(request: InsertRequest, response: Response):
     ]
 
     if (index.upsert(pinecone_request).get('upserted_count') != 1):
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        raise HTTPException(status_code=500, detail="Failed to insert document.")
 
 @app.post("/documents/retrieve", response_model=SearchResponse)
 async def retrieve_documents(request: SearchRequest):
@@ -94,6 +94,7 @@ async def retrieve_documents(request: SearchRequest):
         return SearchResponse(documents=[])
 
     query = request.query
+    re_ranking_strategy = request.re_ranking_strategy
     query_embedding = get_embedding(query)
 
     top_results = index.query(
@@ -101,6 +102,14 @@ async def retrieve_documents(request: SearchRequest):
         top_k=request.num_results,
         include_metadata=True
     ).get('matches')
+
+    # Apply the re-rank strategy before returning the results
+    if re_ranking_strategy == "none":
+        results = top_results
+    elif re_ranking_strategy == "date":
+        results = sorted(top_results, key=lambda x: x['metadata']['date_uploaded'], reverse=True)
+    else:
+        raise HTTPException(status_code=400, detail="Invalid re-ranking strategy.")
 
     results = [
         DocumentResponse
