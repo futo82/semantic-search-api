@@ -22,6 +22,13 @@ docker build -t semantic-search-api .
 docker run --env-file ./.env -p 8000:8000 semantic-search-api
 ```
 
+Pull and run the PostgreSQL docker image with pgvector extension.
+``` 
+docker pull ankane/pgvector
+
+docker run --name pg-with-pgvector -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data ankane/pgvector
+```
+
 ## API
 
 #### POST /document/add
