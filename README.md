@@ -1,6 +1,6 @@
 # Semantic Search API
 
-This repository is based off of the book "Quick Start Guide to Large Language Models" by Sinan Ozdemir and contains a simple example of semantic search using OpenAI and Pinecone. There are two (2) RESTful endpoints, one to add document into a vector database and the other to query documents from the database.
+This repository is based off of the book "Quick Start Guide to Large Language Models" by Sinan Ozdemir and contains a example of semantic search using OpenAI, Pinecone, and PostgreSQL with the pgvector extension. There are two (2) RESTful endpoints, one to add document into a vector database and the other to query documents from the database.
 
 ## Start API Locally
 
