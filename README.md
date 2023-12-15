@@ -1,12 +1,21 @@
 # Semantic Search API
 
-This repository is based off of the book "Quick Start Guide to Large Language Models" by Sinan Ozdemir and contains a example of semantic search using OpenAI, Pinecone, and PostgreSQL with the pgvector extension. There are two (2) RESTful endpoints, one to add document into a vector database and the other to query documents from the database.
+This repository is based off of the book "Quick Start Guide to Large Language Models" by Sinan Ozdemir and contains a example of semantic search using OpenAI, Pinecone, and PostgreSQL with the pgvector extension. You can configure the API to use Pinecone or PostgreSQL vector database. There are two (2) RESTful endpoints, one to add document into a vector database and the other to query documents from the database.
 
-## Start API Locally
+## Start API with Python
 
-Create a .env file that contains the OPENAI_API_KEY and PINECONE_API_KEY environment variables.
+Prerequisite: PostgreSQL with the pgvector extension is running on your localhost on port 5432.
 
-Start the api in the terminal with python.
+Create a .env file that contains the VECTOR_DB, OPENAI_API_KEY, PINECONE_API_KEY, and POSTGRES_URL environment variables.
+
+```
+VECTOR_DB=postgres
+OPENAI_API_KEY=YOUR_OPEN_AI_API_KEY
+PINECONE_API_KEY=YOUR_PINECONE_API_KEY
+POSTGRES_URL=postgresql://postgres:mysecretpassword@localhost:5432/postgres
+```
+
+Start the API in the terminal with python.
 
 ```
 pip install -r requirements.txt
@@ -14,19 +23,42 @@ pip install -r requirements.txt
 python api.py
 ```
 
+## Start API with Docker
 
-Start the api in the terminal with docker.
+Option 1: Build the API docker image and startup the container. This option assumes you have PostgreSQL with the pgvector extension is running on your localhost on port 5432.
+
+Create a .env file that contains the VECTOR_DB, OPENAI_API_KEY, PINECONE_API_KEY, and POSTGRES_URL environment variables.
+
+```
+VECTOR_DB=postgres
+OPENAI_API_KEY=YOUR_OPEN_AI_API_KEY
+PINECONE_API_KEY=YOUR_PINECONE_API_KEY
+POSTGRES_URL=postgresql://postgres:mysecretpassword@localhost:5432/postgres
+```
+
+Start the docker API container.
 ```
 docker build -t semantic-search-api .
 
 docker run --env-file ./.env -p 8000:8000 semantic-search-api
 ```
 
-Pull and run the PostgreSQL docker image with pgvector extension.
-``` 
-docker pull ankane/pgvector
+Option 2: Use docker compose to startup the API and PostgreSQL with the pgvector extension containers. For the database, we use the ankane/pgvector image.
 
-docker run --name pg-with-pgvector -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data ankane/pgvector
+Create a .env file that contains the VECTOR_DB, OPENAI_API_KEY, PINECONE_API_KEY, and POSTGRES_URL environment variables.
+
+```
+VECTOR_DB=postgres
+OPENAI_API_KEY=YOUR_OPEN_AI_API_KEY
+PINECONE_API_KEY=YOUR_PINECONE_API_KEY
+POSTGRES_URL=postgresql://postgres:mysecretpassword@db:5432/postgres
+```
+
+Start the docker API and database containers.
+``` 
+docker compose build
+
+docker compose up -d
 ```
 
 ## API
